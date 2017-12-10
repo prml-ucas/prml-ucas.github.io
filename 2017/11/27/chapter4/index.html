@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="machine learning" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="作者：郁博文 引论线性分类器不同类别的样本间的决策界是超平面。 g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}\begin{cases}g({\bf x})&amp;gt;0,&amp;\te">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第四章 分类模型">
+<meta property="og:url" content="http://yoursite.com/2017/11/27/chapter4/index.html">
+<meta property="og:site_name" content="Nothing is really beautiful but truth">
+<meta property="og:description" content="作者：郁博文 引论线性分类器不同类别的样本间的决策界是超平面。 g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}\begin{cases}g({\bf x})&amp;gt;0,&amp;\te">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/5.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/6.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/7.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/11.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/10.png">
+<meta property="og:updated_time" content="2017-12-10T14:59:49.508Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第四章 分类模型">
+<meta name="twitter:description" content="作者：郁博文 引论线性分类器不同类别的样本间的决策界是超平面。 g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}\begin{cases}g({\bf x})&amp;gt;0,&amp;\te">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/27/chapter4/"/>
+
+
+
+
+
+  <title>第四章 分类模型 | Nothing is really beautiful but truth</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Nothing is really beautiful but truth</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/chapter4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yang Liu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nothing is really beautiful but truth">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">第四章 分类模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T20:51:28+08:00">
+                2017-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <pre><code>                                                                               作者：郁博文
+</code></pre><h2 id="引论"><a href="#引论" class="headerlink" title="引论"></a>引论</h2><p>线性分类器不同类别的样本间的决策界是超平面。</p>
+<script type="math/tex; mode=display">g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}</script><script type="math/tex; mode=display">\begin{cases}g({\bf x})>0,&\text{${\bf x}\in w_1$ }\\g({\bf x})<0,&\text{${\bf x}\in w_2$ }\\g({\bf x})=0,&\text{随机}\end{cases}</script><p>方程$g({\bf x})=0$定义了一个D-1维决策面(D是$\bf x$的维数，如果$\bf x$在决策面上，那么给定任意D-1维数据，$\bf x$的剩下一维都唯一确定)，将属于类别$w_1$的样本和属于类别$w_2$的样本分割开，当$g({\bf x})$是关于${\bf w}$的线性函数时，该决策面为超平面。$\bf w$是该超平面的法向量，设$\bf x_1、\bf x_2$是超平面上的任意两点，则有$g({\bf x_1})-g({\bf x_2})=\bf w^T(x_1-x_2)=0$，所以$\bf w$和超平面上的任意向量正交，法向量指向超平面的正向，即$g({\bf x})&gt;0$的方向<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/1.jpg" alt="超平面上的投影"></p>
+<script type="math/tex; mode=display">{\bf x=x_p}+r{\bf \frac{w}{\Vert\bf w \Vert} }\tag{2}</script><p>$\bf x_p$是$\bf x$在超平面上的投影，r是$x$到超平面的距离，$\frac{w}{\Vert\bf w \Vert}$是单位法向量，带入式(1)可得：</p>
+<script type="math/tex; mode=display">g({\bf x})={\bf w^T x_p}+w_0+r{\bf\frac{w^Tw}{\Vert\bf w \Vert}  }=r{\bf \Vert\bf w \Vert}\Rightarrow r=\frac{g({\bf x})}{\bf \Vert\bf w \Vert}</script><p>如果r&gt;0，在法向量的正方向，类别1，反之类别2<br><a id="more"></a><br>由二分类扩展到多分类，下面是两种不同的策略，左图是一对多的分类，即决策面$g_i(\bf x)$对属于类别$C_i$和不属于$C_i$进行分类，这样的话如果要分成K个类别就会产生K-1个分类器，但是会出现无法分类的区域，左图的绿色区域表示属于$C_1$且属于$C_2$，无法分类。<br>右图是一对一的分类，类别1和类别2,3…n之间都有单独的决策面，所以共有1+2+3+…n-1=$\frac{n(n-1)}{2}$个判别函数，每个点的类别根据这些判别函数中的大多数输出类别确定。但是仍然存在不可分类区域，右图的绿色部分表示三个判别函数输出结果分别为：$C_1、C_2、C_3$，不存在大多数类别，所以无法分类。<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/3.jpg" alt="多类分类一对一"><br>第三种多分类方案可以解决无法分类区域的问题，设计k个线性判别函数，如下：<script type="math/tex">y_k({\bf x})={\bf w^T_{k}x}+w_{k0}</script>如果对于$i\neq k$都有$y_k({\bf x}) &gt; y_i({\bf x})$，那么${\bf x}$属于$C_k$类。可以证明k个判别函数交与一点${\bf x_m}$当且仅当$y_1({\bf x_m})=y_2({\bf x_m})=\cdots=y_k({\bf x_m})$<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/4.jpg" alt="多类分类一对多"></p>
+<h2 id="如何求-bf-w"><a href="#如何求-bf-w" class="headerlink" title="如何求$\bf{w}$"></a>如何求$\bf{w}$</h2><h3 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h3><p>在线性回归问题中，最小二乘法的效果不错，所以自然的可以想到，能否把最小二乘法用到线性分类模型的参数求解中？<br>使用第三种多分类方案，需要求解k组$({\bf w_k},w_{k0})^T$，将k个线性判别函数$y_k({\bf x})={\bf w^T_{k}x}+w_{k0}$写成矩阵的形式：</p>
+<script type="math/tex; mode=display">\bf y(x)=\tilde{W}^T\tilde{x}</script><p>其中tilde表示矩阵和向量的增广形式，$\bf \tilde{W}$的第i列是D+1维向量$\tilde{\bf w_i}=(w_{k0},{\bf w_i}^T)^T$，$\tilde{x}=(1,{\bf x}^T)^T$，现在使用N个训练数据{$\tilde{\bf x_i},\bf t_i$}来求解$\bf \tilde{W}$，其中$\bf t_i$是一个one-hot的k维向量，每一维表示$\tilde{\bf x_i}$是否属于这一类，矩阵T的第i行是$\bf t_i^T$，矩阵X的第i行是$\tilde{\bf x} _i^T$，平方损失函数的矩阵形式如下：</p>
+<script type="math/tex; mode=display">E_D(\widetilde{W}) = \frac{1}{2}Tr\left\{(\tilde{X}\widetilde{W}-T)^T(\tilde{X}\widetilde{W}-T)\right\}\tag{3}</script><p>实际上就是$N\times K$维矩阵每一个元素的平方和$\sum_i\sum_k(\tilde{\bf w}_k^T \tilde{\bf x} _i-\bf t_i^k)^2$。令式3关于$\widetilde{W}$的导数为0，可得（参见张贤达 矩阵分析与应用第五章）</p>
+<script type="math/tex; mode=display">\widetilde{W} = (\tilde{X}^T\tilde{X})^{-1}\tilde{X}^TT\tag{4}</script><p>这是关于$\widetilde{W}$的精确闭式解，但是存在三个问题：</p>
+<ul>
+<li>当$\widetilde{X}$的维度很高时，矩阵的逆计算代价大</li>
+<li>易受到离群点的影响<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/5.jpg" alt="离群点影响"></li>
+<li>最小二乘法实际上是基于误差正态分布假设的极大似然估计，而分类问题的输出是二值(0或1)，很明显不满足这个假设。通过更换极大似然估计的概率模型可以找到更好的分类代价函数。</li>
+</ul>
+<h3 id="fisher线性鉴别"><a href="#fisher线性鉴别" class="headerlink" title="fisher线性鉴别"></a>fisher线性鉴别</h3><p>在高维空间内找到一个超平面使得样本线性可分很难，但是在低维空间内（一条线或者一个面）上对样本集进行分割就很简单，所以线性分类的一个思想就是将高维空间内的点投影到一条线上再进行分类。但是投影前彼此纠缠的点投影后可能也会混杂在一起，所以如何找到一个投影方向使得投影后的店各个类别之间区分明显，最易分类，是fisher线性分类的目标。<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/6.jpg" alt="fisher"><br>将一个D维向量$\bf x$投影到一条线上实际是对$\bf x$的分量做线性组合，得到一个标量$y=\bf w^T x$，当$\Vert \bf w\Vert$=1时，y是$\bf x$在$\bf w$方向上的投影长度，如下图所示，所以寻找最优的$\bf w$实际上是满足不同类别点在投影后的间隔最大。下面的目标是如何用数学语言来表达这个最优化问题。<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/7.jpg" alt="-w400"><br>首先考虑二类样本的分类，定义基本参量：<br>在投影前的D维$\bf x$空间</p>
+<ul>
+<li>样本类内均值向量：$ \bf m_i=\frac{1}{N_i}\sum_{x\in C_i}x\quad i=1,2$</li>
+<li>样本类内散度矩阵：$S_i=\sum_{x\in C_i}{\bf(x-m_i)(x-m_i)}^T $</li>
+<li>总类内散度矩阵：$S_w=\sum_i S_i \quad i=1,2$</li>
+<li>类间散度矩阵：$S_b=\bf (m_1-m_2) (m_1-m_2)^T$</li>
+</ul>
+<p>$\bf(x-m_i)(x-m_i)^T$是D维可逆矩阵，$S_w$是N个可逆矩阵的叠加，当N&gt;D时有$S_w$不可逆。<br>在投影后的1维$y$空间</p>
+<ul>
+<li>样本类内均值：$ \hat m_i=\frac{1}{N_i}\sum_{y\in C_i}y\quad i=1,2$</li>
+<li>样本类内散度：$\hat {S_i}^2=\sum_{y\in C_i}{(y-\hat m_i)}^2 \quad i=1,2$</li>
+<li>总类内散度：$\hat {S_m}=\sum_i \hat {S_i}^2 \quad i=1,2$</li>
+</ul>
+<p>我们希望在投影后的1维Y空间内各类样本尽量分的分开一些，即希望两类样本的均值之差$|\hat m_1-\hat m_2|$越大越好，同时希望统一类别的样本内部较为密集，即总体的类内散度越小越好，所以有如下的目标函数：</p>
+<script type="math/tex; mode=display">J({\bf w})=\frac{(\hat m_1-\hat m_2)^2}{\hat{S_1}^2+\hat{S_2}^2}\tag{5}</script><p>寻找使得式5最大的$\bf w$，但是5中没有显式包含$\bf w$，所以要进行如下变换：</p>
+<script type="math/tex; mode=display">\hat m_i=\frac{1}{N_i}\sum_{y\in C_i}y=\frac{1}{N_i}\sum_{ {\bf x}\in C_i}{\bf w^Tx}={\bf w^T}\frac{1}{N_i}\sum_{ {\bf x}\in C_i}{\bf x}={\bf w^T}\bf m_i</script><p>所以式5的分子变为</p>
+<script type="math/tex; mode=display">(\hat m_1-\hat m_2)^2={\bf w^T(m_1-m_2)(m_1-m_2)^Tw= w^T}S_b\bf w\tag{6}</script><p>再考虑式5的分母和$\bf w$的关系：</p>
+<script type="math/tex; mode=display">\begin{align*}\hat {S_i}^2&=\sum_{y\in C_i}{(y-\hat m_i)}^2=\sum_{x\in C_i}(\bf w^T x-w^Tm_i)^2 \\&={\bf w^T\sum_{x\in C_i}(x-m_i)(x-m_i)^T w}={\bf w^T}S_i\bf w\end{align*}</script><script type="math/tex; mode=display">\hat{S_1}^2+\hat{S_2}^2={\bf w^T}(S_1+S_2){\bf w}={\bf w^T}S_w\bf w\tag{7}</script><p>将式6、7代入5可得</p>
+<script type="math/tex; mode=display">J({\bf w})=\frac{ {\bf w^T} S_b {\bf w} }{ {\bf w^T}S_w\bf w}\tag{8}</script><p>下面求使式8最大的$\bf w^*$，定义拉格朗日函数为：</p>
+<script type="math/tex; mode=display">L({\bf w},\lambda)={\bf w^T}S_b{\bf w}-\lambda {\bf w^T} S_w {\bf w}\tag{9}</script><p>式9对$\bf w$求偏导$\frac{\partial{L({\bf w})} }{\partial{\bf w} }=S_b{\bf w}-\lambda S_w {\bf w}$，令偏导等于0，有：</p>
+<script type="math/tex; mode=display">S_b{\bf w^*}=\lambda S_w {\bf w^*}</script><p>当$N&gt;D$时，$S_w$可逆，所以<script type="math/tex">S_w^{-1}S_b\bf w^* = \lambda w^*</script><br>所以矩阵$S_w^{-1}S_w$特征值为$\lambda$的特征值对应的特征向量就是投影的最佳方向。进一步代入可得 <script type="math/tex">S_b \bf w^*= \bf (m_1-m_2) (m_1-m_2)^T w^*</script>而<script type="math/tex">\bf (m_1-m_2)^Tw^*</script>是一个标量，所以 <script type="math/tex">S_b{\bf w^*}=k\bf (m_1-m_2)</script>，所以：</p>
+<script type="math/tex; mode=display">{\bf w^*}=\frac{k}{\lambda }S_w^{-1}(\bf m_1-m_2)</script><p>忽略常数系数，所以向量$S_w^{-1}(\bf m_1-m_2)$表示的方向就是使目标函数$J(\bf w)$最大的方向，也是把D维样本投影到一维空间的最好方向。<br>上述过程是对二分类问题的fisher线性鉴别，如何推广到K分类呢？<br>二分类问题中投影前的D维$\bf x$空间</p>
+<ul>
+<li>样本类内均值向量：$ \bf m_k=\frac{1}{N_k}\sum_{x\in C_k}x\quad k=1,2$</li>
+<li>样本类内散度矩阵：$S_k=\sum_{x\in C_k}{\bf(x-m_k)(x-m_k)}^T $</li>
+<li>总类内散度矩阵：$S_w=\sum_k S_k \quad k=1,2$</li>
+<li>类间散度矩阵：$S_b=\bf (m_1-m_2) (m_1-m_2)^T$</li>
+</ul>
+<p>$\bf m_i$、$S_i、S_w$都可以自然扩展到K个类别，但是$S_b$不行，所以首先是重新定义$S_b$。<br>定义$S_T$是整体的散度矩阵，有</p>
+<script type="math/tex; mode=display">S_T=\sum_{i=1}^N(\bf x_i-m)(\bf x_i-m)^T</script><p>其中$\bf m$是全局的均值向量$=\sum_{i=1}^N \bf x_i$。<br>$S_w$是总体类内的散度矩阵，整体的散度等于总的类内散度加上类间的散度(人为定义)，所以类间散度$S_b=S_T-S_w$：</p>
+<script type="math/tex; mode=display">\begin{align*} S_b &=\sum_{i=1}^N(\bf x_i-m)(\bf x_i-m)^T-\sum_{k=1}^K\sum_{x\in C_k}{\bf(x-m_k)(x-m_k)}^T\\&=\sum_{i=1}^N {\bf x_ix_i^T-x_i m^T-m x_i^T+m m^T}-\sum_{k=1}^K\sum_{x\in C_k} {\bf xx^T-x m_k^T-m_k x^T+m_k m_K^T}\\&=\sum_{k=1}^K\sum_{x\in C_k}{\bf x(m_k^T-m^T)+(m_k- m)x^T+m m^T-m_km_k^T}\\&=\sum_{k=1}^KN_k [{\bf m_k(m_k^T-m^T)+(m_k-m ) m_k^T+m m^T-m_km_k^T}]\\&=\sum_{k=1}^K N_k[\bf m_k m_k^T+m m^T-m_km^T-mm_k^T ]\\&= \sum_{k=1}^K N_k \bf (m-m_k)(m-m_k)^T \end{align*}</script><p>如果投影后的空间仍然是一维的，那么之前二分类的优化目标函数仍然可以用：</p>
+<script type="math/tex; mode=display">S_w^{-1}S_b\bf w^* = \lambda w^*</script><p>所以矩阵$S_w^{-1}S_w$特征值为$\lambda$的特征值对应的特征向量就是投影的最佳方向。只是<script type="math/tex">S_b{\bf w^{*} }\neq k\bf (m_1-m_2)</script>，所以之前的<script type="math/tex">{\bf w^*}=\frac{k}{\lambda }S_w^{-1}(\bf m_1-m_2)</script>不再适用。如果投影后的空间是<script type="math/tex">D^{'}</script>维的，那么推导过程与上面类似，只是改变了目标函数，见PRML4.1.6</p>
+<h3 id="感知机算法"><a href="#感知机算法" class="headerlink" title="感知机算法"></a>感知机算法</h3><p>感知机是一种二分类的线性分类模型，输入向量$\bf x$首先使用一个固定的非线性变换得到一个特征向量$\Phi(\bf x)$(一般输入的空间很难直接用于分类，所以要映射到特征空间再进行模型的学习)，这个特征向量然后被用于构造一个一般的线性模型，形式为</p>
+<script type="math/tex; mode=display">f({\bf x})=sign({\bf w^T}\Phi \bf ( x))</script><p>sign 是阶跃函数<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/8.png" alt="sign"><br>为了与激活函数的输出相匹配，用{1,-1}表示目标输出，+1表示类别$C_1$，-1表示类别$C_2$，设计误差函数来求解权向量$\bf w$，使得对于类别$C_1$的输入$\bf x$有${\bf w^T}\Phi \bf ( x)&gt;0$，对于类别$C_2$的输入$\bf x$有${\bf w^T}\Phi \bf ( x)&lt;0$，所以当输入的$\bf x_i$被错误分类时有$t_i{\bf w^T}\Phi \bf ( x)&lt;0$，其中$t_i$表示样本$\bf x_i$的真实分量，设计损失函数如下：</p>
+<script type="math/tex; mode=display">E_F({\bf w})=\sum_{ {\bf x_i}\in F}-t_i{\bf w^T}\Phi \bf ( x_i)</script><p>$F$表示错分类样本的集合。$E_F$始终为正值，$E_F$越小，那么模型被模型分类错误的样本点就越少，模型的正确率也就越高，当取其最小值 0 的时候，感知机模型就可以将输入样本完全的分开。</p>
+<script type="math/tex; mode=display">{\bf w^{r+1}=w^{(r)} }-\eta_t \nabla E_F({\bf w})={\bf w^{(r)} } + \eta_t \sum_{ {\bf x_i}\in F}t_i\Phi \bf ( x_i)</script><p>使用批处理算法需要遍历整个训练集，可以每次随机选择一个错分样本来更新权重<br>使用随机梯度下降法不断更新$\bf w$：</p>
+<script type="math/tex; mode=display">{\bf w^{(r+1)}=w^{(r)}}-\eta \nabla E_F({\bf w})={\bf w^{(r)}}+\eta t_i\Phi \bf ( x_i)\tag{10}</script><p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/2.jpg" alt="-w400"><br>上图中红色的点代表类别$C_1$,黑色的点是类别$C_2$，如果样本正确分类，那么权向量保持不变，而如果$C_1$类的样本被错误分类，就把$\Phi \bf ( x_i)$向量加到当前对$\bf w$的估计上，反之就从$\bf w$中减去$\Phi \bf ( x_i)$。可以证明，当数据点是线性可分的时候，感知机的迭代次数存在上界：<br>首先，如果训练数据集线性可分，那么所有训练数据点到最终的分类超平面存在一个最短距离（离分类平面最近的点到分类平面的距离），记为$\gamma$，设n轮迭代后获得的可分超平面的法向量为$\bf w^<em>$，且$\bf w^</em>$的范数为1（不影响方向），那么有：</p>
+<script type="math/tex; mode=display">diss({\bf x_i})=\frac{ {\bf w^{*T} }\Phi \bf ( x_i)}{ {\bf \Vert\bf w^* \Vert} }\Rightarrow |diss({\bf x_i})|={t_i\bf w^{*T}}\Phi \bf ( x_i)\geq \gamma</script><p>其中$t_i\in {-1,1}$，又根据向量点积公式有：</p>
+<script type="math/tex; mode=display">{\bf w^{r}\cdot w^* = \Vert w^{r} \Vert\Vert w^* \Vert cos\alpha \leq \Vert w^{r} \Vert\Vert w^* \Vert}=\Vert {\bf w^{r}} \Vert\tag{11}</script><p>最后一个等号是因为设定的$\Vert w^*\Vert=1$，设$\eta=1$，代入公式10中，有：</p>
+<script type="math/tex; mode=display">{\bf w^{r}\cdot w^*}=({\bf w^{(r)}}+ t_i\Phi {\bf ( x_i))}\cdot{\bf  w^*}\geq {\bf w^{(r)}}\cdot{\bf  w^*}+\gamma\geq \cdots \geq r\gamma\tag{12}</script><script type="math/tex; mode=display">\begin {align*}\Vert{\bf w^{r}}\Vert^2&={\bf w^{r^T} w^{r}}=({\bf w^{(r-1)}}+ t_i\Phi {\bf ( x_i)})^T({\bf w^{(r-1)}}+ t_i\Phi {\bf ( x_i)})\\&=\Vert{\bf w^{(r-1)}}\Vert^2+2t_i{\bf w^{(r-1)}\cdot}{ \Phi {\bf ( x_i)}}+\Vert{ \Phi {\bf ( x_i)}}\Vert^2\\&\leq\Vert{\bf w^{(r-1)}}\Vert^2+\Vert{ \Phi {\bf ( x_i)}}\Vert^2\\&\leq \Vert{\bf w^{(r-1)}}\Vert^2+R^2 \leq \cdots\leq rR^2 \tag{13}\end {align*}</script><p>上式的第一行是根据随机梯度下降法中参数的迭代，第二行到第三行是根据错分样本的$t_i{\bf w^{(r-1)}\cdot}{ \Phi {\bf ( x_i)}}\leq 0$，第三行到第四行是设$max_{i=1}^{N_F}(\Vert{ \Phi {\bf ( x_i)}}\Vert)=R^2$，将式12、13代入11可得：</p>
+<script type="math/tex; mode=display">r\gamma \leq{\bf w^{r}\cdot w^*}=\Vert {\bf w^{r}} \Vert\leq \sqrt{r}R\Rightarrow r\leq\frac{R^2}{\gamma^2}</script><p>说明错误分类次数存在一个上限值，算法最终的错误分类次数达到上限时就会收敛。因此如果数据线性可分，那么感知机模型确实会收敛。<br>感知机实际上是单层的神经网络，有一个很有趣的故事是感知机不能解决异或问题：<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/11.jpg" alt=""><br>这实际上不是感知器自己的问题，线性分类模型包括logistic regression和线性核的SVM都无法解决异或问题，如图所示，能否在圆形点()和三角形点之间找到一个能够正确分类的线性决策面？</p>
+<h2 id="生成式模型与判别式模型"><a href="#生成式模型与判别式模型" class="headerlink" title="生成式模型与判别式模型"></a>生成式模型与判别式模型</h2><p>生成式模型(generative model)会对x和y的联合分布$p(x,y)$进行建模，然后通过贝叶斯公式来求得$p(y|x)$, 最后选取使得$p(y|x)$最大的$y^*$，即：</p>
+<script type="math/tex; mode=display">y_{*}=arg \max_{y}p(y|x)=arg \max_{y}\frac{p(x|y)p(y)}{p(x)}=arg \max_{y}p(x|y)p(y)</script><ul>
+<li>朴素贝叶斯 $p({\bf x}|C_i)p(C_i)=p(x_1|C_i)\cdots p(x_m|C_i)=p(C_i)\prod_{j=1} p(x_j|C_i)$</li>
+<li>HMM：${\bf w}^*=\mathop{arg\; max}_\limits{\bf w} p(s|o)=\mathop{arg\; max}_\limits{\bf w} p(o|s)p(s)$<br>生成模型，对类别或者输出的分布$p(y)$ 和给定输入后输出的分布$p(y|x)$都进行了建模。</li>
+</ul>
+<h3 id="生成式模型之贝叶斯分类器"><a href="#生成式模型之贝叶斯分类器" class="headerlink" title="生成式模型之贝叶斯分类器"></a>生成式模型之贝叶斯分类器</h3><p>样本$\bf x$属于类别$C_i$的概率$p(C_i|{\bf x})=\frac{p({\bf x}|C_i)p(C_i)}{p({\bf x})}$考虑到$p({\bf x})$是与类别$C_i$无关的量，所以可以定义决策函数$g_i({\bf x})={\rm In} \;p({\bf x}|C_i)p(C_i)$表示${\bf x}$属于$C_i$类的可能性(与概率不同)，如果$g_i({\bf x})&gt;g_j({\bf x})$，那么${\bf x}$相比于$c_j$更可能属于$c_i$类，$g_i({\bf x})$就是贝叶斯判别函数。</p>
+<script type="math/tex; mode=display">g_i({\bf x})-g_j({\bf x})=0\tag{14}</script><p>式14表示的超平面就是类别$C_i$和$C_j$之间的决策面。<br>假设$p({\bf x}|C_i)\sim N(\mu_i,\Sigma_i)$，${\bf x}=(x_1,x_2,\cdots,x_d)^T$，根据多维高斯分布公式有：</p>
+<script type="math/tex; mode=display">P({\bf x}|C_i)=\frac{1}{(2\pi)^{\frac{d}{2}}|\Sigma_i|^{\frac{1}{2}}}exp[-\frac{1}{2}({\bf x}-{\bf \mu_i})^T\Sigma_i^{-1}({\bf x}-{\bf \mu_i})]\tag{15}</script><p>其中${\bf \mu_i}$是关于类别$C_i$的d维均值列向量，$\Sigma_i$是$d\times d$维协方差矩阵，$\Sigma_i^{-1}$是$\Sigma$的逆矩阵，$|\Sigma_i|$是$\Sigma_i$的行列式。代入$g_i(\bf x)$可得：</p>
+<script type="math/tex; mode=display">\begin{align*}g_i({\bf x})&={\rm In}(\frac{1}{(2\pi)^{\frac{d}{2}}|\Sigma_i|^{\frac{1}{2}}}exp[-\frac{1}{2}({\bf x}-{\bf \mu_i})^T\Sigma_i^{-1}({\bf x}-{\bf \mu_i})])+{\rm In}\;p(c_i)\\&=-\frac{d}{2}{\rm In}\;2\pi-\frac{1}{2}{\rm In}\;|\Sigma_i|-\frac{1}{2}({\bf x}-{\bf \mu_i})^T\Sigma_i^{-1}({\bf x}-{\bf \mu_i})+{\rm In}\;p(c_i)\tag{16}\end{align*}</script><p>在往下求解决策面的参数之前，我们先看一下式15是怎么由一元正态分布推出来的<br>设样本${\bf x}$的$d$维分量彼此独立互不相关且$x_i$满足正态分布$\sim N(\mu_i,\sigma_i^2)$，则有多元条件概率</p>
+<script type="math/tex; mode=display">\begin{align*}p({\bf x}|C)&=p(x_1,x_2\cdots,x_d|C)=\prod_{i=1}^d P(x_i|C)\\&=\prod_{i=1}^d \frac{1}{\sqrt{2\pi}\sigma_i}exp[-\frac{1}{2}(\frac{x_i-\mu_i}{\sigma_i})^2]\\&=\frac{1}{(2\pi)^{\frac{d}{2}}\prod_{i=1}^d\sigma_i}exp[\sum_{i=1}^d -\frac{1}{2}(\frac{x_i-\mu_i}{\sigma_i})^2 ]\tag{17}\end{align*}</script><p>因为$x_i$与$x_j$互不相关的假设，可求得：</p>
+<script type="math/tex; mode=display">\sigma_{ij}=E((x_i-\mu_i)(x_j-\mu_j))=E(x_i-\mu_i)E(x_j-\mu_j)=0</script><p>因此协方差矩阵就成为对角阵：</p>
+<script type="math/tex; mode=display">\Sigma=\begin{pmatrix}
+ \sigma_{11}^2 &  0 & \cdots &  0 \\
+  0&  \sigma_{22}^2 & \cdots &  0 \\
+ \vdots & \vdots & \ddots & \vdots \\
+ 0 &  0 & \cdots &  \sigma_{dd}^2 \\
+ \end{pmatrix}</script><p> 根据对角阵相关性质可得</p>
+<script type="math/tex; mode=display">\Sigma^{-1}=\begin{pmatrix}
+ \frac{1}{\sigma_{11}^2} &  0 & \cdots &  0 \\
+  0&  \frac{1}{\sigma_{22}^2} & \cdots &  0 \\
+ \vdots & \vdots & \ddots & \vdots \\
+ 0 &  0 & \cdots &  \frac{1}{\sigma_{dd}^2} \\
+ \end{pmatrix}$$$$|\Sigma|=\prod_{i=1}^d \sigma_{ii}^2 \;\;\;\;\;\;\;\;\;|\Sigma|^{\frac{1}{2}}=\prod_{i=1}^d \sigma_{ii} \tag{18}</script><p> 所以有式17的指数项:</p>
+<script type="math/tex; mode=display">\begin{align*}\sum_{i=1}^d (\frac{x_i-\mu_i}{\sigma_i})^2&=[x_1-\mu_1,\cdots,x_d-\mu_d]\begin{pmatrix}
+ 1/ \sigma_{11}^2 &  0 & \cdots &  0 \\
+  0&  1/ \sigma_{22}^2 & \cdots &  0 \\
+ \vdots & \vdots & \ddots & \vdots \\
+ 0 &  0 & \cdots &  1/ \sigma_{dd}^2 \\
+ \end{pmatrix}\begin{bmatrix} x_1-\mu_1  \\ \vdots \\ x_d-\mu_d \\ \end{bmatrix}\\&=({\bf x-\mu})^T \Sigma^{-1}({\bf x-\mu})\end{align*}</script><p>  将上式、式18代入式17可得：</p>
+<script type="math/tex; mode=display">P({\bf x}|c)=\prod_{i=1}^d P(x_i|c)=\frac{1}{(2\pi)^{\frac{d}{2}}|\Sigma|^{\frac{1}{2}}}exp[-\frac{1}{2}({\bf x}-{\bf \mu})^T\Sigma^{-1}({\bf x}-{\bf \mu})]</script><p> 现在回到式16:<script type="math/tex">g_i({\bf x})={\rm In} \;p({\bf x}|C_i)p(C_i)=-\frac{d}{2}{\rm In}\;2\pi-\frac{1}{2}{\rm In}\;|\Sigma_i|-\frac{1}{2}({\bf x}-{\bf \mu_i})^T\Sigma_i^{-1}({\bf x}-{\bf \mu_i})+{\rm In}\;p(C_i)\tag{16}</script><br> 如果$\Sigma_1=\cdots=\Sigma_i=\Sigma$即每个类别的协方差矩阵都相等，那么有</p>
+<script type="math/tex; mode=display">g_i({\bf x})=-\frac{d}{2}{\rm In}\;2\pi-\frac{1}{2}{\rm In}\;|\Sigma|-\frac{1}{2}({\bf x}-{\bf \mu_i})^T\Sigma^{-1}({\bf x}-{\bf \mu_i})+{\rm In}\;p(C_i)</script><p> 去掉与$C_i$无关的第一第二项得到：</p>
+<script type="math/tex; mode=display">g_i({\bf x})=-\frac{1}{2}({\bf x}-{\bf \mu_i})^T\Sigma^{-1}({\bf x}-{\bf \mu_i})+{\rm In}\;p(C_i)\tag{19}</script><p> 将式19展开并忽略与$C_i$无关的${\bf x}^T\Sigma^{-1}{\bf x}$项得到： </p>
+<script type="math/tex; mode=display">g_i({\bf x})=-\frac{1}{2}(-{\bf x}^T\Sigma^{-1}{\bf \mu_i}-{\bf \mu_i}^T\Sigma^{-1}{\bf x}+{\bf \mu_i}^T\Sigma^{-1}{\bf \mu_i})+{\rm In}\;p(C_i)</script><p> 因为协方差矩阵$\Sigma$是对称矩阵，且${\bf x}^T\Sigma^{-1}{\bf \mu_i}$是一个标量，所以有${\bf x}^T\Sigma^{-1}{\bf \mu_i}={\bf \mu_i}^T\Sigma^{-1}{\bf x}$代入可得：</p>
+<script type="math/tex; mode=display">g_i({\bf x})=-\frac{1}{2}(-2{\bf \mu_i}^T\Sigma^{-1}{\bf x}+{\bf \mu_i}^T\Sigma^{-1}{\bf \mu_i})+{\rm In}\;p(C_i)</script><script type="math/tex; mode=display">={\bf \mu_i}^T\Sigma^{-1}{\bf x}-\frac{1}{2}{\bf \mu_i}^T\Sigma^{-1}{\bf \mu_i}+{\rm In}\;p(C_i)\tag{20}</script><p> 由式20可得，它也是${\bf x}$的线性判别函数，将式20代入$g_i({\bf x})-g_j({\bf x})=0$可得决策面方程如下：<script type="math/tex">({\bf \mu_i}^T-{\bf \mu_j}^T)\Sigma^{-1}{\bf x}-\frac{1}{2}({\bf \mu_i}^T\Sigma^{-1}{\bf \mu_i}-{\bf \mu_j}^T\Sigma^{-1}{\bf \mu_j})+{\rm In}\;\frac{p(C_i)}{p(C_j)}=0\tag{21}</script></p>
+<h3 id="判别式模型之logistic-regression"><a href="#判别式模型之logistic-regression" class="headerlink" title="判别式模型之logistic regression"></a>判别式模型之logistic regression</h3><p>判别式模型(discriminative model)则会直接对$p(y|x)$进行建模，$g_w(x)=p(y|x)$，求解$w$<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/10.png" alt="sigmoid"><br>logistic regission用于分类的时候在线性分类器的基础上套用了sigmoid函数，二分类条件下：</p>
+<script type="math/tex; mode=display">g_0({\bf x})=p(C=0|{\bf x})=\frac{1}{1+e^{\bf w^Tx}}</script><script type="math/tex; mode=display">g_1({\bf x})=p(C=1|{\bf x})=1-p(C=0|{\bf x})=\frac{e^{\bf w^Tx}}{1+e^{\bf w^Tx}}=\frac{1}{1+e^{-\bf w^Tx}}</script><p>在二分类条件下，多元贝叶斯分类器（式21）的参数包括2个$d$维的均值向量，一个共享的协方差矩阵$\Sigma$，协方差矩阵是对称的所以包括$\frac{d\times (d+1)}{2}$个参数，再加上一个类别的先验概率$p(C_1)$，共有$\frac{d\times (d+5)}{2}+1$个参数，而logistic regression只有一个$d$维的$\bf w$,</p>
+<p>那为什么说logistic实际上也可以理解为一种线性模型呢？在统计和概率理论中，一个事件的发生几率（Odds）是该事件发生和不发生的比率，$odds(p) = \frac p{1 - p}$，对odds 取对数称为logit函数：</p>
+<script type="math/tex; mode=display">logit(p) = log(\frac p{1 - p})</script><p>所以代入可得：</p>
+<script type="math/tex; mode=display">logit(p(C=1|{\bf x})) = log\frac {P(C=1|{\bf x})}{1-P(C=1|{\bf x})} = {\bf w^T x}</script><p>$P(C=1|{\bf x})$的对数几率是由输入$\bf x$的线性函数，现在的目标是如何计算参数$\bf w$，假设由N个训练样本${ {\bf x_i},C_i}$，$p(C=1|{\bf x})=h_{\bf w}({\bf x})$，假设样本独立同分布，似然函数为$\prod [h_w(x_i)]^{C_i}[1-h_w(x_i)]^{(1-C_i)}$，取对数可得：</p>
+<script type="math/tex; mode=display">L({\bf w}) = \sum _{i=1}^{N}logP(C_i|{\bf x_i;w}) = \sum_{i=1}^{N}[C_i log\;h_{\bf w} ({\bf x_i}) +(1-C_i)log(1-h_{\bf w}({\bf x_i}))]</script><p>这其实就是交叉熵代价函数，使用梯度下降进行优化求参数。</p>
+<script type="math/tex; mode=display">\begin{aligned}
+\frac{\partial L({\bf w})}{\partial {\bf w}} &=         \sum_{i=1}^N\{C_i\frac{1}{h_{\bf w} ({\bf x_i})}\partial h_{\bf w} ({\bf x_i})-(1-C_i)\frac{1}{1-h_{\bf w} ({\bf x_i})}\partial h_{\bf w} ({\bf x_i})\}\\
+       &=\sum_{i=1}^N\{(C_i\frac{1}{h_{\bf w} ({\bf x_i})}-(1-C_i)\frac{1}{1-h_{\bf w} ({\bf x_i})})h_{\bf w} ({\bf x_i})(1-h_{\bf w} ({\bf x_i}))\partial(-w^T{\bf x_i})\}\\
+       &=\sum_{n=1}^N\{(h_{\bf w} ({\bf x_i})-C_i){\bf x_i}\}
+\end{aligned}</script><p>上式的函数形式与线性回归模型中的平方和误差函数的梯度的函数形式完全相同。但是这种没有加入正则化项的logisstic regression通过极大似然去求解参数(经验风险最小化)可能会出现过拟合，一个原因是在我们的假设中参数$\bf w$没有任何的限制条件，不服从任何先验分布，模型为了拟合所有的训练数据，w可以变得任意大。解决方法是加入正则化项，相当于是引入了$\bf w$的先验分布，$L({\bf w}) = \sum _{i=1}^{N}logP(C_i|{\bf x_i;w})P({\bf w})$。<br>4.33节是使用牛顿法(Newton-Raphson)求解$\bf w$，牛顿法对目标函数的要求比梯度下降法要求更高；牛顿法需要在初始点领域是二阶可导；而梯度下降法只要求函数在初始点领域有一阶偏导；假若两种方法都是有效的，根据收敛判断定理；牛顿法是二阶收敛，梯度下降法是线性收敛；<br>logistic regression由二分类问题扩展到多分类问题有两种思路，第一种就是prml4.3.4中介绍的，$g_k({\bf x})=p(C_k|{\bf x})=\frac{e^{\bf w_k^Tx}}{\sum_i e^{\bf w_i^Tx}}$，这实际上是softmax回归，可以理解为logistic regression是k=2时的softmax回归的一种退化：</p>
+<script type="math/tex; mode=display">g_1(x)=\frac{e^{\bf w_1^Tx}}{e^{\bf w_1^Tx}+e^{\bf w_0^Tx}}=\frac{1}{1+e^{\bf(w_0^T-w_1^T)x}}</script><p>第二种思路就是训练k-1个logistic二分类器，第$i$个分类器$g_i()$能够对属于类别$C_i$和不属于类别$C_i$的样本进行分类，对于给定数据$\bf x$，选择最大的$g_i(\bf x)$对应的类别$C_i$作为最后的分类类别。<br>这两种思路对应开头的第三种和第二种多分类方法，可以看出第二种思路最后会导致分类区域的重叠，所以适用于类别不互斥的分类，比如影视原声、流行歌曲这两个类别，某个样本既可以包括在影视原声里也可以包括在流行歌曲中。第一种思路不会产生分类上的重叠，所以适用于不互斥的类别。</p>
+<p>总的来说，判别式模型是对条件概率$p(y|x)$建模而生成式模型是对联合概率$p(x,y)$建模，但是不管是生成式模型还是判别式模型，它们最终的判断依据都是条件概率$p(y|x)$，生成式模型的$p(x,y)$要通过贝叶斯公式计算得到条件概率。但是判别模型不会去考虑不同类别$C_i$与数据之间的内在联系，不会考虑用类别$C_i$的概率分布来生成数据的可能性，生成模型考虑到了后验概率$p(x|y)$和先验概率$p(y)$，更接近统计学的思想。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a href="https://cs.nju.edu.cn/wujx/paper/FLD.pdf" target="_blank" rel="noopener">Fisher’s Linear Discriminant—LAMDA Group—NJU </a></li>
+<li><a href="https://cs.uwaterloo.ca/~y328yu/classics/novikoff.pdf" target="_blank" rel="noopener">On convergence proofs on perceptrons</a></li>
+<li><a href="https://www.zhihu.com/question/19723347" target="_blank" rel="noopener">梯度下降法与牛顿法</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/13/chapter3/" rel="next" title="第三章 回归模型">
+                <i class="fa fa-chevron-left"></i> 第三章 回归模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Yang Liu" />
+          <p class="site-author-name" itemprop="name">Yang Liu</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引论"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5F15;&#x8BBA;" class="headerlink" title="&#x5F15;&#x8BBA;"></a>&#x5F15;&#x8BBA;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何求-bf-w"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5982;&#x4F55;&#x6C42;-bf-w" class="headerlink" title="&#x5982;&#x4F55;&#x6C42;$\bf{w}$"></a>&#x5982;&#x4F55;&#x6C42;$\bf{w}$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最小二乘法"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x6700;&#x5C0F;&#x4E8C;&#x4E58;&#x6CD5;" class="headerlink" title="&#x6700;&#x5C0F;&#x4E8C;&#x4E58;&#x6CD5;"></a>&#x6700;&#x5C0F;&#x4E8C;&#x4E58;&#x6CD5;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fisher线性鉴别"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#fisher&#x7EBF;&#x6027;&#x9274;&#x522B;" class="headerlink" title="fisher&#x7EBF;&#x6027;&#x9274;&#x522B;"></a>fisher&#x7EBF;&#x6027;&#x9274;&#x522B;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#感知机算法"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#&#x611F;&#x77E5;&#x673A;&#x7B97;&#x6CD5;" class="headerlink" title="&#x611F;&#x77E5;&#x673A;&#x7B97;&#x6CD5;"></a>&#x611F;&#x77E5;&#x673A;&#x7B97;&#x6CD5;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成式模型与判别式模型"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x751F;&#x6210;&#x5F0F;&#x6A21;&#x578B;&#x4E0E;&#x5224;&#x522B;&#x5F0F;&#x6A21;&#x578B;" class="headerlink" title="&#x751F;&#x6210;&#x5F0F;&#x6A21;&#x578B;&#x4E0E;&#x5224;&#x522B;&#x5F0F;&#x6A21;&#x578B;"></a>&#x751F;&#x6210;&#x5F0F;&#x6A21;&#x578B;&#x4E0E;&#x5224;&#x522B;&#x5F0F;&#x6A21;&#x578B;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成式模型之贝叶斯分类器"><span class="nav-number">3.1.</span> <span class="nav-text"><a href="#&#x751F;&#x6210;&#x5F0F;&#x6A21;&#x578B;&#x4E4B;&#x8D1D;&#x53F6;&#x65AF;&#x5206;&#x7C7B;&#x5668;" class="headerlink" title="&#x751F;&#x6210;&#x5F0F;&#x6A21;&#x578B;&#x4E4B;&#x8D1D;&#x53F6;&#x65AF;&#x5206;&#x7C7B;&#x5668;"></a>&#x751F;&#x6210;&#x5F0F;&#x6A21;&#x578B;&#x4E4B;&#x8D1D;&#x53F6;&#x65AF;&#x5206;&#x7C7B;&#x5668;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判别式模型之logistic-regression"><span class="nav-number">3.2.</span> <span class="nav-text"><a href="#&#x5224;&#x522B;&#x5F0F;&#x6A21;&#x578B;&#x4E4B;logistic-regression" class="headerlink" title="&#x5224;&#x522B;&#x5F0F;&#x6A21;&#x578B;&#x4E4B;logistic regression"></a>&#x5224;&#x522B;&#x5F0F;&#x6A21;&#x578B;&#x4E4B;logistic regression</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;&#x6587;&#x732E;" class="headerlink" title="&#x53C2;&#x8003;&#x6587;&#x732E;"></a>&#x53C2;&#x8003;&#x6587;&#x732E;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yang Liu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
