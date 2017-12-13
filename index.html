@@ -250,6 +250,138 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/11/chapter5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yang Liu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nothing is really beautiful but truth">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/11/chapter5/" itemprop="url">第五章 神经网络</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-11T23:25:27+08:00">
+                2017-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>作者：韩歆哲</p>
+</blockquote>
+<h2 id="什么是前馈神经网络"><a href="#什么是前馈神经网络" class="headerlink" title="什么是前馈神经网络"></a>什么是前馈神经网络</h2><p>对于模式识别主要有两类问题</p>
+<ul>
+<li><strong>分类</strong>:  找到一个分类方程；</li>
+<li><strong>回归</strong>：找到一个回归方程。<br>他们的本质都是学习得到一个能够解决问题的方程表达式。<h3 id="神经网络的基本结构与传统统计机器学习方法的关系"><a href="#神经网络的基本结构与传统统计机器学习方法的关系" class="headerlink" title="神经网络的基本结构与传统统计机器学习方法的关系"></a>神经网络的基本结构与传统统计机器学习方法的关系</h3>前面讨论过的传统统计学习方法，包括LR，感知机等模型，本质上是将变量本身，或者通过变量组合得到的特征（基函数）进行线性组合得到线性或者非线性的分类界面：</li>
+</ul>
+<script type="math/tex; mode=display">y(\mathrm{x}, \mathrm{w}) = f\left( \sum_{j=1}^M \omega_j\phi_j( \mathrm{x} ) \right)</script>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/12/11/chapter5/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/chapter4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -320,8 +452,10 @@
 
       
         
-          <pre><code>                                                                               作者：郁博文
-</code></pre><h2 id="引论"><a href="#引论" class="headerlink" title="引论"></a>引论</h2><p>线性分类器不同类别的样本间的决策界是超平面。</p>
+          <blockquote>
+<p>作者：郁博文</p>
+</blockquote>
+<h2 id="引论"><a href="#引论" class="headerlink" title="引论"></a>引论</h2><p>线性分类器不同类别的样本间的决策界是超平面。</p>
 <script type="math/tex; mode=display">g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}</script><script type="math/tex; mode=display">\begin{cases}g({\bf x})>0,&\text{${\bf x}\in w_1$ }\\g({\bf x})<0,&\text{${\bf x}\in w_2$ }\\g({\bf x})=0,&\text{随机}\end{cases}</script><p>方程$g({\bf x})=0$定义了一个D-1维决策面(D是$\bf x$的维数，如果$\bf x$在决策面上，那么给定任意D-1维数据，$\bf x$的剩下一维都唯一确定)，将属于类别$w_1$的样本和属于类别$w_2$的样本分割开，当$g({\bf x})$是关于${\bf w}$的线性函数时，该决策面为超平面。$\bf w$是该超平面的法向量，设$\bf x_1、\bf x_2$是超平面上的任意两点，则有$g({\bf x_1})-g({\bf x_2})=\bf w^T(x_1-x_2)=0$，所以$\bf w$和超平面上的任意向量正交，法向量指向超平面的正向，即$g({\bf x})&gt;0$的方向<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/1.jpg" alt="超平面上的投影"></p>
 <script type="math/tex; mode=display">{\bf x=x_p}+r{\bf \frac{w}{\Vert\bf w \Vert} }\tag{2}</script><p>$\bf x_p$是$\bf x$在超平面上的投影，r是$x$到超平面的距离，$\frac{w}{\Vert\bf w \Vert}$是单位法向量，带入式(1)可得：</p>
 <script type="math/tex; mode=display">g({\bf x})={\bf w^T x_p}+w_0+r{\bf\frac{w^Tw}{\Vert\bf w \Vert}  }=r{\bf \Vert\bf w \Vert}\Rightarrow r=\frac{g({\bf x})}{\bf \Vert\bf w \Vert}</script><p>如果r&gt;0，在法向量的正方向，类别1，反之类别2<br>
@@ -448,8 +582,10 @@
 
       
         
-          <pre><code>                                                                           作者：王愚德
-</code></pre><h2 id="频率学派"><a href="#频率学派" class="headerlink" title="频率学派"></a>频率学派</h2><h3 id="1-基础线性模型"><a href="#1-基础线性模型" class="headerlink" title="1.基础线性模型"></a>1.基础线性模型</h3><p>在线性回归问题中，最简单的线性模型为：</p>
+          <blockquote>
+<p>作者：王愚德</p>
+</blockquote>
+<h2 id="频率学派"><a href="#频率学派" class="headerlink" title="频率学派"></a>频率学派</h2><h3 id="1-基础线性模型"><a href="#1-基础线性模型" class="headerlink" title="1.基础线性模型"></a>1.基础线性模型</h3><p>在线性回归问题中，最简单的线性模型为：</p>
 <script type="math/tex; mode=display">y(\mathbf{x},\mathbf{w})=\mathbf{w}^\mathrm{T}\mathbf{x}=w_0+w_1x_1+\cdots+w_Dx_D</script><p>其中 $\mathbf{x}$为输入数据，$\mathbf{w}$为所求线性模型参数。<br>将上述模型进行扩展，$\mathbf{x}$可由多个$\mathbf{x}$的函数取代：</p>
 <script type="math/tex; mode=display">
 y(\mathbf{x},\mathbf{w}) = \mathbf{w}^\mathrm{T}\phi(\mathbf{x})= w_0+\sum_{j=1}^{M-1}w_j \phi_j(\mathbf{x})</script>
@@ -539,7 +675,7 @@ y(\mathbf{x},\mathbf{w}) = \mathbf{w}^\mathrm{T}\phi(\mathbf{x})= w_0+\sum_{j=1}
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

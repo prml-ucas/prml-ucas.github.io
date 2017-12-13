@@ -94,12 +94,12 @@
 
 
 
-<meta name="description" content="作者：郁博文 引论线性分类器不同类别的样本间的决策界是超平面。 g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}\begin{cases}g({\bf x})&amp;gt;0,&amp;\te">
+<meta name="description" content="作者：郁博文  引论线性分类器不同类别的样本间的决策界是超平面。 g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}\begin{cases}g({\bf x})&amp;gt;0,&amp;\text{${\bf x}\in w_1$ }\\g({\bf x})">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第四章 分类模型">
 <meta property="og:url" content="http://yoursite.com/2017/11/27/chapter4/index.html">
 <meta property="og:site_name" content="Nothing is really beautiful but truth">
-<meta property="og:description" content="作者：郁博文 引论线性分类器不同类别的样本间的决策界是超平面。 g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}\begin{cases}g({\bf x})&amp;gt;0,&amp;\te">
+<meta property="og:description" content="作者：郁博文  引论线性分类器不同类别的样本间的决策界是超平面。 g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}\begin{cases}g({\bf x})&amp;gt;0,&amp;\text{${\bf x}\in w_1$ }\\g({\bf x})">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/1.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/3.jpg">
@@ -111,10 +111,10 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/2.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/11.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/10.png">
-<meta property="og:updated_time" content="2017-12-10T14:59:49.508Z">
+<meta property="og:updated_time" content="2017-12-13T08:22:50.625Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="第四章 分类模型">
-<meta name="twitter:description" content="作者：郁博文 引论线性分类器不同类别的样本间的决策界是超平面。 g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}\begin{cases}g({\bf x})&amp;gt;0,&amp;\te">
+<meta name="twitter:description" content="作者：郁博文  引论线性分类器不同类别的样本间的决策界是超平面。 g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}\begin{cases}g({\bf x})&amp;gt;0,&amp;\text{${\bf x}\in w_1$ }\\g({\bf x})">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/1.jpg">
 
 
@@ -330,8 +330,10 @@
       
 
       
-        <pre><code>                                                                               作者：郁博文
-</code></pre><h2 id="引论"><a href="#引论" class="headerlink" title="引论"></a>引论</h2><p>线性分类器不同类别的样本间的决策界是超平面。</p>
+        <blockquote>
+<p>作者：郁博文</p>
+</blockquote>
+<h2 id="引论"><a href="#引论" class="headerlink" title="引论"></a>引论</h2><p>线性分类器不同类别的样本间的决策界是超平面。</p>
 <script type="math/tex; mode=display">g({\bf x})={\bf w^T x}+x_0=g_1({\bf x})-g_2({\bf x})\tag{1}</script><script type="math/tex; mode=display">\begin{cases}g({\bf x})>0,&\text{${\bf x}\in w_1$ }\\g({\bf x})<0,&\text{${\bf x}\in w_2$ }\\g({\bf x})=0,&\text{随机}\end{cases}</script><p>方程$g({\bf x})=0$定义了一个D-1维决策面(D是$\bf x$的维数，如果$\bf x$在决策面上，那么给定任意D-1维数据，$\bf x$的剩下一维都唯一确定)，将属于类别$w_1$的样本和属于类别$w_2$的样本分割开，当$g({\bf x})$是关于${\bf w}$的线性函数时，该决策面为超平面。$\bf w$是该超平面的法向量，设$\bf x_1、\bf x_2$是超平面上的任意两点，则有$g({\bf x_1})-g({\bf x_2})=\bf w^T(x_1-x_2)=0$，所以$\bf w$和超平面上的任意向量正交，法向量指向超平面的正向，即$g({\bf x})&gt;0$的方向<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/1.jpg" alt="超平面上的投影"></p>
 <script type="math/tex; mode=display">{\bf x=x_p}+r{\bf \frac{w}{\Vert\bf w \Vert} }\tag{2}</script><p>$\bf x_p$是$\bf x$在超平面上的投影，r是$x$到超平面的距离，$\frac{w}{\Vert\bf w \Vert}$是单位法向量，带入式(1)可得：</p>
 <script type="math/tex; mode=display">g({\bf x})={\bf w^T x_p}+w_0+r{\bf\frac{w^Tw}{\Vert\bf w \Vert}  }=r{\bf \Vert\bf w \Vert}\Rightarrow r=\frac{g({\bf x})}{\bf \Vert\bf w \Vert}</script><p>如果r&gt;0，在法向量的正方向，类别1，反之类别2<br><a id="more"></a><br>由二分类扩展到多分类，下面是两种不同的策略，左图是一对多的分类，即决策面$g_i(\bf x)$对属于类别$C_i$和不属于$C_i$进行分类，这样的话如果要分成K个类别就会产生K-1个分类器，但是会出现无法分类的区域，左图的绿色区域表示属于$C_1$且属于$C_2$，无法分类。<br>右图是一对一的分类，类别1和类别2,3…n之间都有单独的决策面，所以共有1+2+3+…n-1=$\frac{n(n-1)}{2}$个判别函数，每个点的类别根据这些判别函数中的大多数输出类别确定。但是仍然存在不可分类区域，右图的绿色部分表示三个判别函数输出结果分别为：$C_1、C_2、C_3$，不存在大多数类别，所以无法分类。<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/3.jpg" alt="多类分类一对一"><br>第三种多分类方案可以解决无法分类区域的问题，设计k个线性判别函数，如下：<script type="math/tex">y_k({\bf x})={\bf w^T_{k}x}+w_{k0}</script>如果对于$i\neq k$都有$y_k({\bf x}) &gt; y_i({\bf x})$，那么${\bf x}$属于$C_k$类。可以证明k个判别函数交与一点${\bf x_m}$当且仅当$y_1({\bf x_m})=y_2({\bf x_m})=\cdots=y_k({\bf x_m})$<br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter4/4.jpg" alt="多类分类一对多"></p>
@@ -471,6 +473,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2017/12/11/chapter5/" rel="prev" title="第五章 神经网络">
+                第五章 神经网络 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -546,7 +552,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
