@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="machine learning" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="作者：韩歆哲  什么是前馈神经网络对于模式识别主要有两类问题  分类:  找到一个分类方程； 回归：找到一个回归方程。他们的本质都是学习得到一个能够解决问题的方程表达式。神经网络的基本结构与传统统计机器学习方法的关系前面讨论过的传统统计学习方法，包括LR，感知机等模型，本质上是将变量本身，或者通过变量组合得到的特征（基函数）进行线性组合得到线性或者非线性的分类界面：  y(\mathrm{x},">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第五章 神经网络">
+<meta property="og:url" content="http://yoursite.com/2017/12/11/chapter5/index.html">
+<meta property="og:site_name" content="Nothing is really beautiful but truth">
+<meta property="og:description" content="作者：韩歆哲  什么是前馈神经网络对于模式识别主要有两类问题  分类:  找到一个分类方程； 回归：找到一个回归方程。他们的本质都是学习得到一个能够解决问题的方程表达式。神经网络的基本结构与传统统计机器学习方法的关系前面讨论过的传统统计学习方法，包括LR，感知机等模型，本质上是将变量本身，或者通过变量组合得到的特征（基函数）进行线性组合得到线性或者非线性的分类界面：  y(\mathrm{x},">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/3.JPG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/25.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/24.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/4.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/7.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/8.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/9.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/10.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/11.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/12.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/13.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/14.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/15.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/16.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/17.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/18.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/19.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/20.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/21.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/22.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/23.PNG">
+<meta property="og:updated_time" content="2017-12-13T08:27:50.026Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第五章 神经网络">
+<meta name="twitter:description" content="作者：韩歆哲  什么是前馈神经网络对于模式识别主要有两类问题  分类:  找到一个分类方程； 回归：找到一个回归方程。他们的本质都是学习得到一个能够解决问题的方程表达式。神经网络的基本结构与传统统计机器学习方法的关系前面讨论过的传统统计学习方法，包括LR，感知机等模型，本质上是将变量本身，或者通过变量组合得到的特征（基函数）进行线性组合得到线性或者非线性的分类界面：  y(\mathrm{x},">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/11/chapter5/"/>
+
+
+
+
+
+  <title>第五章 神经网络 | Nothing is really beautiful but truth</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Nothing is really beautiful but truth</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/11/chapter5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yang Liu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nothing is really beautiful but truth">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">第五章 神经网络</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-11T23:25:27+08:00">
+                2017-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>作者：韩歆哲</p>
+</blockquote>
+<h2 id="什么是前馈神经网络"><a href="#什么是前馈神经网络" class="headerlink" title="什么是前馈神经网络"></a>什么是前馈神经网络</h2><p>对于模式识别主要有两类问题</p>
+<ul>
+<li><strong>分类</strong>:  找到一个分类方程；</li>
+<li><strong>回归</strong>：找到一个回归方程。<br>他们的本质都是学习得到一个能够解决问题的方程表达式。<h3 id="神经网络的基本结构与传统统计机器学习方法的关系"><a href="#神经网络的基本结构与传统统计机器学习方法的关系" class="headerlink" title="神经网络的基本结构与传统统计机器学习方法的关系"></a>神经网络的基本结构与传统统计机器学习方法的关系</h3>前面讨论过的传统统计学习方法，包括LR，感知机等模型，本质上是将变量本身，或者通过变量组合得到的特征（基函数）进行线性组合得到线性或者非线性的分类界面：</li>
+</ul>
+<script type="math/tex; mode=display">y(\mathrm{x}, \mathrm{w}) = f\left( \sum_{j=1}^M \omega_j\phi_j( \mathrm{x} ) \right)</script><a id="more"></a>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/1.jpg" alt="@分类界面示意图"> </p>
+<p>前馈神经网络的典型模型如下图</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/2.png" alt="@三层神经网络模型示意图"></p>
+<p>每个神经元的值是前一个神经元值的加权组合，写出多层神经网络的输出的表达式可以得到：</p>
+<script type="math/tex; mode=display">y_k = h_l\left(\sum_{j=0}^M \omega_{kj}^l  h_{l-1}\left( \sum_{i=0}^D \omega_{ji}^{l-1}\cdots\right)\right)</script><p>将表达式与前面学习的方法进行对比，可以发现神经网络实际上就是将传统方法模型级联，得到了表达能力更强的方程表达。用三层神经网络拟合一个正弦曲线的示意图如下：</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/3.JPG" alt="@三层神经网络线性回归"></p>
+<p>上图中的虚线表示隐藏层神经元的值，从数学表达上看，三条线可以作为正弦函数的基函数，从物理意义上看可以作为正弦曲线的“特征”。神经网络拥有远超传统方法表达能力的原因就是传统方法需要自己设计基函数或者说是特征，而神经网络通过增加的隐藏层可以根据数据学习得到使得误差最小的特征，因此在相同参数数量条件下函数的表达能力更强。</p>
+<h3 id="网络的前馈方程"><a href="#网络的前馈方程" class="headerlink" title="网络的前馈方程"></a>网络的前馈方程</h3><p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/25.png" alt="Alt text"></p>
+<p>单个神经元的值实际上是前一层输入的加权线性组合</p>
+<script type="math/tex; mode=display">a_j = \sum_{i = 1}^D \omega_{ji}^{(l)}x_i +\omega_{j0}^{(l)}</script><p>为了使得神经网络有非线性的表达能力，需要对$a_j$进行非线性激活（线性函数级联依旧是线性函数，而线性函数不是完备基）得到神经元的输出</p>
+<script type="math/tex; mode=display">z_j = h(a_j)</script><p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/24.PNG" alt="@多层前馈网络示意图"></p>
+<p>多层神经网络就是单个神经元级联和并联的组合，隐藏神经元的值是前一层所有神经元输出的加权组合再进行非线性激活</p>
+<script type="math/tex; mode=display">a_k = \sum_{j = 1}^M \omega_{kj}^{(l+1)}z_j +\omega_{k0}^{(l+1)}，z_k = h(a_k)</script><p>对于输出神经元，若是回归问题，输出就是隐层的加权组合<script type="math/tex">y_k = a_k</script>，若是二分类问题，输出应该压缩在(0,1)，即$y_k = \sigma(a_k)$，对于多分类问题，输出可以采用softmax激活，即$y_k = softmax(a_k) $。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/4.PNG" alt="@三层神经网络回归问题示例"></p>
+<h4 id="神经网络-vs-感知机"><a href="#神经网络-vs-感知机" class="headerlink" title="神经网络 vs. 感知机"></a>神经网络 vs. 感知机</h4><p>感知机模型是将输入或者输入的特征进行加权组合再与分类面比较，大于0为1，小于0为-1，表达式为：</p>
+<script type="math/tex; mode=display">y_k = sign(\mathbf{w}\phi(\mathbf{x}))</script><p>可以抽象为如下图所示的，以符号函数为激活函数的单个神经元。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/5.png" alt="@感知机模型抽象"></p>
+<h4 id="神经网络-vs-逻辑回归"><a href="#神经网络-vs-逻辑回归" class="headerlink" title="神经网络 vs. 逻辑回归"></a>神经网络 vs. 逻辑回归</h4><p>逻辑回归是将输入或者输入的特征进行加权组合，然后通过sigmoid函数转化到(0,1)</p>
+<script type="math/tex; mode=display">p(C_k|\phi) = \sigma(\mathbf{w}\phi(\mathbf{x}))</script><p>可以抽象为以sigmoid函数为激活函数的神经元。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/6.png" alt="@逻辑回归模型抽象"></p>
+<h4 id="神经网络实现XOR"><a href="#神经网络实现XOR" class="headerlink" title="神经网络实现XOR"></a>神经网络实现XOR</h4><p>前面的讨论中我们提到过，逻辑回归和感知机等模型都不能解决XOR问题（即(0,0)(1,1)一类，(0,1)(1,0)一类），而一个三层的神经网络，通过不同基函数（AND, ~AND, OR）的组合就可以解决XOR问题。一个简单的结果方案如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/7.PNG" alt="@XOR神经网络实现"></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">$x_1$</th>
+<th style="text-align:center">$x_2$</th>
+<th style="text-align:center">$a_1$</th>
+<th style="text-align:center">$a_2$</th>
+<th style="text-align:center">$b$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="误差的反向传播"><a href="#误差的反向传播" class="headerlink" title="误差的反向传播"></a>误差的反向传播</h2><p>前面我们已经讨论过了，神经网络实际上与前面的学习方法没有本质上的区别，都是对于方程的拟合，那么传统的根据训练数据调整方程表达式的序列学习方法(sequential learning)，也就是我们最常使用的(随机)梯度下降法（SGD）在神经网络的训练中同样适用。梯度下降法的表达式为</p>
+<script type="math/tex; mode=display">\mathbf{w}^{\tau+1} = \mathbf{w}^{\tau} - \eta \nabla E_n(\mathbf{w}^\tau)</script><p>假设采用最小均方误差来度量损失，对于一个确定模式的训练数据$x_n$</p>
+<script type="math/tex; mode=display">E_n = \frac{1}{2}\sum_k (y_{nk}-t_{nk})^2</script><p>多层神经网络与前面训练过程不同的地方就是隐藏层的权重与输出并没有显性的函数关系，因此输出关于隐藏层权重的微分难以表达。误差的反向传播算法实际上就是通过链式将每一层的Error转化为相同的形式，将关于权重的微分进行递归地求解。</p>
+<h3 id="误差传播的链式法则"><a href="#误差传播的链式法则" class="headerlink" title="误差传播的链式法则"></a>误差传播的链式法则</h3><p>一个多层神经网络后三层误差传播的示意图如下：</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/8.PNG" alt="@误差反向传播"></p>
+<p>对于假设某个神经元输出的误差为$E_n$，对与该神经元直接相连的权重$\omega_{ji}$求偏导得</p>
+<script type="math/tex; mode=display">\frac{\partial E_n}{\partial w_{ji} } = \frac{\partial E_n}{\partial a_{j} }  \frac{\partial a_j}{\partial w_{ji} }</script><p>记$\delta_j \equiv \frac{\partial E_n}{\partial a_{j} }$，根据前一小节的表达式$\frac{\partial a_j}{\partial w_{ji} } = z_i$</p>
+<p>因此，上式可以写为</p>
+<script type="math/tex; mode=display">\frac{\partial E_n}{\partial w_{ji}} = \delta_j z_i</script><p>对于输出神经元</p>
+<script type="math/tex; mode=display">\delta_k =  \frac{\partial E_n}{\partial y_{k} } = y_k - t_k</script><p>对于隐藏层神经元，对误差求偏导可以得到</p>
+<script type="math/tex; mode=display">\delta_j \equiv  \frac{\partial E_n}{\partial a_{j}} = \sum_k   \frac{\partial E_n}{\partial a_{k}} \frac{\partial a_k}{\partial a_{j}}</script><p>其中 $\frac{\partial E_n}{\partial a_{k} } = \delta_k$，再根据$a_k = \sum_j \omega_{kj} h(a_j) $，可以得到</p>
+<script type="math/tex; mode=display">\delta_j = h'(a_j)\sum_k \omega_{kj}\delta_k</script><p>根据上面的表达式，每一个神经元的误差$\delta_j$可以利用上一层神经元的误差递推地求出，进而更新权重得</p>
+<script type="math/tex; mode=display">w_{ji}^{\tau+1} = w_{ji}^{\tau} - \eta  \delta_j^{\tau} z_i^{\tau}</script><h2 id="神经网络的正则化方法"><a href="#神经网络的正则化方法" class="headerlink" title="神经网络的正则化方法"></a>神经网络的正则化方法</h2><p>神经网络的表达能力很强带来的负面效果就是容易过拟合，一个隐藏层神经元的网络就可以表达非常复杂的函数形式。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/9.PNG" alt="@单隐层神经网络的过拟合"></p>
+<p>这一部分将介绍几种典型的神经网络正则化方法和它们的理论依据。</p>
+<h3 id="高斯先验的相容性"><a href="#高斯先验的相容性" class="headerlink" title="高斯先验的相容性"></a>高斯先验的相容性</h3><p>对于一个训练好的最优的神经网络，如果将输出样本都进行如下的线性变换</p>
+<script type="math/tex; mode=display">x_i \rightarrow \tilde{x_i} = ax_i + b</script><p>那么我们只需要将第一层的权重和偏差进行如下的相反的线性变换，整个网络的输出将会和原网络相同。</p>
+<script type="math/tex; mode=display">\omega_{ji} \rightarrow \tilde{\omega_{ji} } = \frac{1}{a}\omega_{ji}</script><script type="math/tex; mode=display">\omega_{j0} \rightarrow \tilde{\omega_{j0} } = \omega_{j0} - \frac{b}{a}\sum_i\omega_{ji}</script><p>同理，如果将输出标签进行线性变换</p>
+<script type="math/tex; mode=display">y_k \rightarrow \tilde{y_k} = cy_k + d</script><p>对最后一层网络进行如下变换，输出依旧与网络相同</p>
+<script type="math/tex; mode=display">\omega_{kj} \rightarrow \tilde{\omega_{kj}} = c\omega_{ji}</script><script type="math/tex; mode=display">\omega_{k0} \rightarrow \tilde{\omega_{k0}} = c\omega_{k0} + d</script><p>传统统计机器学习中的正则化方法是简单地再误差函数加入权重的二范数作为正则化项</p>
+<script type="math/tex; mode=display">\tilde{E}(\mathbf{w}) = E(\mathbf{w}) + \frac{\lambda}{2}\mathbf{w}^\mathrm{T}\mathbf{w}</script><p>二范数的正则化从贝叶斯理论出发，实际上就是对权重给出了一个正态先验，通过后验概率表示误差函数。所谓高斯先验的相容性指的是，当所有权重的先验相同的时候，学习得到的权重也趋向于比较接近的值（同一个高斯分布内），从集合上表示就是权重的值趋向于选择在正则化项约束的超球面的表面，如下图所示。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/10.PNG" alt="@二范数正则化的几何描述"></p>
+<p>而当对输入和输出做前面所讲的线性变换以后，由于对所有参数被统一高斯先验的约束，趋向于选择相思的值，最中的训练结果将无法得到前面所说的只改变一层网络的最优解。解决这个问题比较简单也比较常用的方法是对每一层给出不同的先验</p>
+<script type="math/tex; mode=display">p(\mathbf{w}) \propto \mathrm{exp}\left( -\frac{1}{2}\sum_k \alpha_k\|\mathbf{w}\|_k^2 \right)</script><p>当改变输出或者输入的时候我们只需要改变相应层的约束$\alpha_k$，前面的那种方式得到的可行解就能够被纳入解空间，这种方法在现在的深度学习框架中也比较常用（每一层设置不同的weight_decay）。</p>
+<h3 id="早停止"><a href="#早停止" class="headerlink" title="早停止"></a>早停止</h3><p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/11.PNG" alt="@训练过程中训练集和验证集loss曲线"></p>
+<p>早停止这种方式比较直接，在训练数据中分出一部分作为验证集(validation)。训练过程中训练集的loss会不断下降，但是过拟合以后验证集的loss会开始上升。我们可以选择在验证集取得最小值的时候停止训练过程。</p>
+<h3 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h3><p>不变性指的是让网络对轻微变化数据有一定的容忍能力，这样当数据发生某些可以容忍变化的时候网络也能正确区分。比如在手写字的识别中，写在不同位置的6或者旋转了一定角度的6都应该被识别成6。这方面主要有四种手段。</p>
+<h4 id="切线传播"><a href="#切线传播" class="headerlink" title="切线传播"></a>切线传播</h4><p>切线传播的本质就是在在正则化项中加入惩罚项，惩罚当输入数据发生特定变换的时候（比如，平移或旋转）网络输出发生的改变。假设这种变换由参数$\xi$控制，对于不同的输入，变换可以用函数$\mathrm{s} (\mathrm{x}_n, \xi)$表示。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/12.PNG" alt="@二维空间内输入向量连续变换示意图"></p>
+<p>向量发生微小的变化的变化量在数学上就可以用函数在某一点的切线斜率（导数）来描述。</p>
+<p>记变换对$\xi$的导数在$\xi = 0$处为</p>
+<script type="math/tex; mode=display">\tau_n = \left. \frac{\partial s(x_n,\xi)}{\partial \xi}\right|_{\xi=0}</script><p>第$k$个输出对$\xi$的偏导为</p>
+<script type="math/tex; mode=display">\left.\frac{\partial y_k}{\partial \xi}\right|_{\xi=0}
+                = \left.\sum_{i=1}^D \frac{\partial y_k}{\partial x_i}\frac{\partial x_i}{\partial \xi}\right|_{\xi=0}
+                = \sum_{i=0}^D J_{ki}\tau_i</script><p>我们希望</p>
+<script type="math/tex; mode=display">\left.\frac{\partial y_k}{\partial \xi}\right|_{\xi=0}\rightarrow 0</script><p>将偏导的平方作为损失函数的正则化项，即</p>
+<script type="math/tex; mode=display">\Omega = \frac{1}{2}\sum_n\sum_k \left( \left.\frac{\partial y_{nk}}{\partial \xi}\right|_{\xi=0} \right)^2
+                = \frac{1}{2}\sum_n\sum_k \left( \sum_{i=0}^D J_{ki}\tau_i \right)^2</script><p>得到新的损失函数为</p>
+<script type="math/tex; mode=display">\tilde{E} = E + \lambda\Omega</script><h4 id="变换输入样本扩展数据集（Data-Augmentation"><a href="#变换输入样本扩展数据集（Data-Augmentation" class="headerlink" title="变换输入样本扩展数据集（Data Augmentation)"></a>变换输入样本扩展数据集（Data Augmentation)</h4><p>这种方法是我们在实际操作中最常用的方法，采用神经网络需要大量充分的训练数据本质上也是模拟数据发生变换的过程。这种方法在实际操作上比较直接，在这里我们希望讨论的是它与切线传播的关系。</p>
+<p>假设变化后的数据输入网络产生的误差函数为</p>
+<script type="math/tex; mode=display">\tilde{E} = \frac{1}{2}\iiint \{ y(s(x,\xi)) - t \}^2p(t|x)p(x)p(\xi)\mathrm{d}x\mathrm{d}t\mathrm{d}\xi</script><p>对变换函数$(y(s(x,\xi))-t)^2$在$\xi=0$进行二阶泰勒展开得（这里为了推导方便支队单变量的x进行展开的示例，当x为向量时，将函数按照矩阵函数表达即可）</p>
+<script type="math/tex; mode=display">\begin{split}
+                    \tilde{E} &= \frac{1}{2}\iint \{ y(x) - t \}^2p(t|x)p(x)\mathrm{d}x\mathrm{d}t\\
+                    &+ \mathbb{E}[\xi]\iint \{ y(x) - t \}\tau \nabla y(x) p(t|x)p(x)\mathrm{d}x\mathrm{d}t\\
+                    &+ \mathbb{E}[\xi^2]\iint \left[\{ y(x) - t \} \frac{1}{2} \left\{ \tau' \nabla y(x)
+                    +\tau \nabla \nabla y(x)\tau \right\}\right.\\
+                    &+ \left. \left(\tau\nabla y(x)\right)^2 \right] p(t|x)p(x)\mathrm{d}x\mathrm{d}t
+                    + O(\xi^3)
+                \end{split}</script><p>由于变换是在一个微小的范围内，且向不同方向变换数量应该接近（比如旋转顺时针逆时针都应该存在），可以认为 $\mathbb{E}[\xi] = 0 $，记$\mathbb{E}[\xi^2] = \lambda $，误差函数可以表达为标准形式</p>
+<script type="math/tex; mode=display">\tilde{E} = E + \lambda\Omega</script><p>其中，</p>
+<script type="math/tex; mode=display">\Omega = \int \left[\{ y(x) - \mathbb{E}[t|x]  \} \frac{1}{2} \left\{ \tau' \nabla y(x)
+                +\tau \nabla \nabla y(x)\tau \right\}
+                + \left(\tau\nabla y(x)\right)^2 \right] p(x)\mathrm{d}x</script><p>根据泰勒展开的表达式 $\Omega = O(\xi^2) $，因此同第一章回归问题的求解类似，可以得到最小化$y(x)$的解为</p>
+<script type="math/tex; mode=display">y(x) = \mathbb{E}[t|x] + O(\xi^2)</script><p>因此，$\Omega$的第一项为0，正则化项可以化简为</p>
+<script type="math/tex; mode=display">\Omega = \frac{1}{2}\int \left(\tau\nabla y(x)\right)^2 p(x) \mathrm{d}x</script><p>与前面讲的切线传播正则化项的表达式对比可以发现形式完全相同！我认为这是一个非常有价值的结论，很多情况下我么的训练数据都是不足的，如果我们能写出变换的表达式，那么就不需要那么多训练数据就可以达到相同的效果。</p>
+<h4 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h4><p>数据预处理在前面的传统方法中就已经非常常用了，如果我们可以从训练数据中提取具有不变性的统一的特征，那么根据这些不变特征学习得到的表达式显然是具有不变性的。</p>
+<h4 id="卷积神经网络（CNN）"><a href="#卷积神经网络（CNN）" class="headerlink" title="卷积神经网络（CNN）"></a>卷积神经网络（CNN）</h4><p>实现不变性的另外一种方式是将不变性加入网络结构的设计当中，具有代表性的方法就是CNN。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/13.PNG" alt="@CNN基本结构"></p>
+<p>CNN的基本结构是由卷积层、下采样的组合以及全连接组成。所谓卷积过程，有信号处理基础的同学应该都能发信啊，实际上做的并不是“卷积”，而是“相关”或者说是滤波，通过一个滑动滤波器在输入层找到与滤波器结构最相似的结构作为特征。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/14.gif" alt="@卷积过程"></p>
+<p>比如将下图所示的结构作为卷积核在小老鼠这副图片上进行滑动卷积</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/15.PNG" alt="@卷积核"></p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/16.PNG" alt="Alt text"><br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/17.PNG" alt="Alt text"></p>
+<p>当卷积核滑动到上图所示位置时，输出单元的值6600。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/18.PNG" alt="Alt text"><br><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/19.PNG" alt="Alt text"></p>
+<p>当卷积核滑动到老鼠头的位置是，输出单元的值为0。这个过程说明了卷积的效果实际上就是在输入空间中寻早与卷积核相同的结构，这也引出了局部感受野的概念。</p>
+<p>所谓局部感受野就是我们无法直接看到一副图像的全貌，但是我们可以看到很多个细节。我们认为一副图片是一张脸不需要这张脸长的一样，只需要这副图片上有眼有鼻子有嘴就可以了。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/20.png" alt="@局部感受野"></p>
+<p>比如说上图的两个x，形状完全不同，但是我们如何能判断出右图的也是一个x呢？如果将右图的x分块我们就可以发现左右两个x的基本结构都是完全相同的。我们如果能判断这些基本结构是否存在，它们的相对位置是否相同就可以判断出这是一个x。</p>
+<p>滑动卷积的另一个效果就是实现了权值共享，通过一个卷积核作为权重在整个图上滑动，一方面实现了不变特征的提取，另一方面也减小了参数的数量。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/21.PNG" alt="@特征提取"></p>
+<p>卷积层之后通常连接下采样层，下采样层的作用是用均值或者最大值代表一个区域内特征检测的结果，进一步提升对于局部特征变换的容忍程度，通过网络结构实现不变性。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/22.PNG" alt="@下采样"></p>
+<p>由于CNN网络结构所带来的不变性本身就可以在一定程度上客服过拟合，因此CNN可以做的很深进一步提升表达能力。深度CNN可以通过多个卷积层的级联提取到不同尺度，不同抽象程度的特征。</p>
+<p><img src="https://raw.githubusercontent.com/prml-ucas/blog-images/master/chapter5/23.PNG" alt="Alt text"></p>
+<h2 id="软权值共享"><a href="#软权值共享" class="headerlink" title="软权值共享"></a>软权值共享</h2><p>卷积神经网络实现了权值共享，让某一层的所有神经元的权重都一致，都是该层卷积核的值，从而减小了参数的数量，同时实现了网络的不变性。但是这种方式只适用于特征只是是局部相关的先验的条件下。1992年Hinton提出了软权值共享这个概念，将对于权重完全相等的强约束转化为在每一组权重服从相同的正态分布，每一组权重趋向于取到相似的值。</p>
+<p>假设权重可以独立的分成多个组，每个组的分布都可以用混合高斯模型来描述。即</p>
+<script type="math/tex; mode=display">p(\mathrm{w}) = \prod_i p(w_i)</script><p>其中，</p>
+<script type="math/tex; mode=display">p(\omega_i) = \sum_{j=1}^M \pi_j \mathcal{N}(\omega_i|\mu_j, \sigma_j^2)</script><p>将这个混合先验作为误差函数的正则化项</p>
+<script type="math/tex; mode=display">\Omega(w) = -\sum_i \ln \left( \sum_{j=1}^M \pi_j \mathcal{N}(\omega_i|\mu_j, \sigma_j^2) \right)</script><p>将比例系数$\pi_k$看作隐含变量的先验$p(z_k=1) = \pi_k$，优化过程可以通过EM算法实现。</p>
+<p>记</p>
+<script type="math/tex; mode=display">\gamma_j(w) \equiv p(z_j=1|w_j) = \frac{\pi_j \mathcal{N}(w|\mu_j, \sigma_j^2) }
+            {\sum_k \pi_k \mathcal{N}(w|\mu_k, \sigma_k^2) }</script><p>正则项对权重的微分为</p>
+<script type="math/tex; mode=display">\begin{split}
+                \frac{\partial \Omega }{\partial w_i } &= \frac{1}{\sum_k \pi_k \mathcal{N}(w|\mu_k, \sigma_k^2)}
+                \sum_j \pi_j \mathcal{N}(w|\mu_j, \sigma_j^2)\frac{\omega_i-\mu_j }{\sigma_j^2}\\
+                &= \sum_j \gamma_j(w_i)\frac{w_i-\mu_j}{\sigma_j^2}
+            \end{split}</script><p>这说明权重趋向于第$j$组高斯分布的均值，这也是我们希望的，每一组内的权重趋向于相似的值。</p>
+<p>正则项对于高斯分布均值的微分为：</p>
+<script type="math/tex; mode=display">\frac{\partial \Omega }{\partial \mu_j } = \sum_i \gamma_j(\omega_i)\frac{\mu_j-w_i}{\sigma_j^2}</script><p>这个结果的直觉上的解释就是高斯分布的均值趋向于组内权重的加权平均，权重正比于给定权值的第$j$组高斯分分布的后验概率。</p>
+<p>相似的，正则化项关于标准差的微分为</p>
+<script type="math/tex; mode=display">\frac{\partial \Omega }{\partial \sigma_j } = \sum_i \gamma_j(\omega_i)\left(\frac{1}{\sigma_j }-\frac{(w_i-\mu_j)^2}{\sigma_j^3}\right)</script><p>它将$\sigma_j$拉向权重在对应中心$\mu_j$附近偏差的平方的加权平均，权重也是第$j$个高斯分量产生的权值参数的后验概率。</p>
+<p>以上为第五章讨论班内容整理，希望对大家有所帮助。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/27/chapter4/" rel="next" title="第四章 分类模型">
+                <i class="fa fa-chevron-left"></i> 第四章 分类模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Yang Liu" />
+          <p class="site-author-name" itemprop="name">Yang Liu</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是前馈神经网络"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;&#x524D;&#x9988;&#x795E;&#x7ECF;&#x7F51;&#x7EDC;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;&#x524D;&#x9988;&#x795E;&#x7ECF;&#x7F51;&#x7EDC;"></a>&#x4EC0;&#x4E48;&#x662F;&#x524D;&#x9988;&#x795E;&#x7ECF;&#x7F51;&#x7EDC;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#神经网络的基本结构与传统统计机器学习方法的关系"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x7684;&#x57FA;&#x672C;&#x7ED3;&#x6784;&#x4E0E;&#x4F20;&#x7EDF;&#x7EDF;&#x8BA1;&#x673A;&#x5668;&#x5B66;&#x4E60;&#x65B9;&#x6CD5;&#x7684;&#x5173;&#x7CFB;" class="headerlink" title="&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x7684;&#x57FA;&#x672C;&#x7ED3;&#x6784;&#x4E0E;&#x4F20;&#x7EDF;&#x7EDF;&#x8BA1;&#x673A;&#x5668;&#x5B66;&#x4E60;&#x65B9;&#x6CD5;&#x7684;&#x5173;&#x7CFB;"></a>&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x7684;&#x57FA;&#x672C;&#x7ED3;&#x6784;&#x4E0E;&#x4F20;&#x7EDF;&#x7EDF;&#x8BA1;&#x673A;&#x5668;&#x5B66;&#x4E60;&#x65B9;&#x6CD5;&#x7684;&#x5173;&#x7CFB;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络的前馈方程"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#&#x7F51;&#x7EDC;&#x7684;&#x524D;&#x9988;&#x65B9;&#x7A0B;" class="headerlink" title="&#x7F51;&#x7EDC;&#x7684;&#x524D;&#x9988;&#x65B9;&#x7A0B;"></a>&#x7F51;&#x7EDC;&#x7684;&#x524D;&#x9988;&#x65B9;&#x7A0B;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#神经网络-vs-感知机"><span class="nav-number">1.2.1.</span> <span class="nav-text"><a href="#&#x795E;&#x7ECF;&#x7F51;&#x7EDC;-vs-&#x611F;&#x77E5;&#x673A;" class="headerlink" title="&#x795E;&#x7ECF;&#x7F51;&#x7EDC; vs. &#x611F;&#x77E5;&#x673A;"></a>&#x795E;&#x7ECF;&#x7F51;&#x7EDC; vs. &#x611F;&#x77E5;&#x673A;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#神经网络-vs-逻辑回归"><span class="nav-number">1.2.2.</span> <span class="nav-text"><a href="#&#x795E;&#x7ECF;&#x7F51;&#x7EDC;-vs-&#x903B;&#x8F91;&#x56DE;&#x5F52;" class="headerlink" title="&#x795E;&#x7ECF;&#x7F51;&#x7EDC; vs. &#x903B;&#x8F91;&#x56DE;&#x5F52;"></a>&#x795E;&#x7ECF;&#x7F51;&#x7EDC; vs. &#x903B;&#x8F91;&#x56DE;&#x5F52;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#神经网络实现XOR"><span class="nav-number">1.2.3.</span> <span class="nav-text"><a href="#&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x5B9E;&#x73B0;XOR" class="headerlink" title="&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x5B9E;&#x73B0;XOR"></a>&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x5B9E;&#x73B0;XOR</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#误差的反向传播"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x8BEF;&#x5DEE;&#x7684;&#x53CD;&#x5411;&#x4F20;&#x64AD;" class="headerlink" title="&#x8BEF;&#x5DEE;&#x7684;&#x53CD;&#x5411;&#x4F20;&#x64AD;"></a>&#x8BEF;&#x5DEE;&#x7684;&#x53CD;&#x5411;&#x4F20;&#x64AD;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#误差传播的链式法则"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x8BEF;&#x5DEE;&#x4F20;&#x64AD;&#x7684;&#x94FE;&#x5F0F;&#x6CD5;&#x5219;" class="headerlink" title="&#x8BEF;&#x5DEE;&#x4F20;&#x64AD;&#x7684;&#x94FE;&#x5F0F;&#x6CD5;&#x5219;"></a>&#x8BEF;&#x5DEE;&#x4F20;&#x64AD;&#x7684;&#x94FE;&#x5F0F;&#x6CD5;&#x5219;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#神经网络的正则化方法"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x7684;&#x6B63;&#x5219;&#x5316;&#x65B9;&#x6CD5;" class="headerlink" title="&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x7684;&#x6B63;&#x5219;&#x5316;&#x65B9;&#x6CD5;"></a>&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#x7684;&#x6B63;&#x5219;&#x5316;&#x65B9;&#x6CD5;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高斯先验的相容性"><span class="nav-number">3.1.</span> <span class="nav-text"><a href="#&#x9AD8;&#x65AF;&#x5148;&#x9A8C;&#x7684;&#x76F8;&#x5BB9;&#x6027;" class="headerlink" title="&#x9AD8;&#x65AF;&#x5148;&#x9A8C;&#x7684;&#x76F8;&#x5BB9;&#x6027;"></a>&#x9AD8;&#x65AF;&#x5148;&#x9A8C;&#x7684;&#x76F8;&#x5BB9;&#x6027;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#早停止"><span class="nav-number">3.2.</span> <span class="nav-text"><a href="#&#x65E9;&#x505C;&#x6B62;" class="headerlink" title="&#x65E9;&#x505C;&#x6B62;"></a>&#x65E9;&#x505C;&#x6B62;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不变性"><span class="nav-number">3.3.</span> <span class="nav-text"><a href="#&#x4E0D;&#x53D8;&#x6027;" class="headerlink" title="&#x4E0D;&#x53D8;&#x6027;"></a>&#x4E0D;&#x53D8;&#x6027;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#切线传播"><span class="nav-number">3.3.1.</span> <span class="nav-text"><a href="#&#x5207;&#x7EBF;&#x4F20;&#x64AD;" class="headerlink" title="&#x5207;&#x7EBF;&#x4F20;&#x64AD;"></a>&#x5207;&#x7EBF;&#x4F20;&#x64AD;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#变换输入样本扩展数据集（Data-Augmentation"><span class="nav-number">3.3.2.</span> <span class="nav-text"><a href="#&#x53D8;&#x6362;&#x8F93;&#x5165;&#x6837;&#x672C;&#x6269;&#x5C55;&#x6570;&#x636E;&#x96C6;&#xFF08;Data-Augmentation" class="headerlink" title="&#x53D8;&#x6362;&#x8F93;&#x5165;&#x6837;&#x672C;&#x6269;&#x5C55;&#x6570;&#x636E;&#x96C6;&#xFF08;Data Augmentation)"></a>&#x53D8;&#x6362;&#x8F93;&#x5165;&#x6837;&#x672C;&#x6269;&#x5C55;&#x6570;&#x636E;&#x96C6;&#xFF08;Data Augmentation)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据预处理"><span class="nav-number">3.3.3.</span> <span class="nav-text"><a href="#&#x6570;&#x636E;&#x9884;&#x5904;&#x7406;" class="headerlink" title="&#x6570;&#x636E;&#x9884;&#x5904;&#x7406;"></a>&#x6570;&#x636E;&#x9884;&#x5904;&#x7406;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷积神经网络（CNN）"><span class="nav-number">3.3.4.</span> <span class="nav-text"><a href="#&#x5377;&#x79EF;&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#xFF08;CNN&#xFF09;" class="headerlink" title="&#x5377;&#x79EF;&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#xFF08;CNN&#xFF09;"></a>&#x5377;&#x79EF;&#x795E;&#x7ECF;&#x7F51;&#x7EDC;&#xFF08;CNN&#xFF09;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软权值共享"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x8F6F;&#x6743;&#x503C;&#x5171;&#x4EAB;" class="headerlink" title="&#x8F6F;&#x6743;&#x503C;&#x5171;&#x4EAB;"></a>&#x8F6F;&#x6743;&#x503C;&#x5171;&#x4EAB;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yang Liu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
